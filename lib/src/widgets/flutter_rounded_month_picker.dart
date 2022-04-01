@@ -92,12 +92,15 @@ class FlutterRoundedMonthPicker extends StatefulWidget {
   final OnTapDay? onTapDay;
 
   @override
-  _FlutterRoundedMonthPickerState createState() => _FlutterRoundedMonthPickerState();
+  _FlutterRoundedMonthPickerState createState() =>
+      _FlutterRoundedMonthPickerState();
 }
 
-class _FlutterRoundedMonthPickerState extends State<FlutterRoundedMonthPicker> with SingleTickerProviderStateMixin {
+class _FlutterRoundedMonthPickerState extends State<FlutterRoundedMonthPicker>
+    with SingleTickerProviderStateMixin {
   static final Animatable<double> _chevronOpacityTween =
-      Tween<double>(begin: 1.0, end: 0.0).chain(CurveTween(curve: Curves.easeInOut));
+      Tween<double>(begin: 1.0, end: 0.0)
+          .chain(CurveTween(curve: Curves.easeInOut));
 
   @override
   void initState() {
@@ -147,7 +150,8 @@ class _FlutterRoundedMonthPickerState extends State<FlutterRoundedMonthPicker> w
 
   void _updateCurrentDate() {
     _todayDate = DateTime.now();
-    final DateTime tomorrow = DateTime(_todayDate.year, _todayDate.month, _todayDate.day + 1);
+    final DateTime tomorrow =
+        DateTime(_todayDate.year, _todayDate.month, _todayDate.day + 1);
     Duration timeUntilTomorrow = tomorrow.difference(_todayDate);
     // so we don't miss it by rounding
     timeUntilTomorrow += const Duration(seconds: 1);
@@ -158,7 +162,9 @@ class _FlutterRoundedMonthPickerState extends State<FlutterRoundedMonthPicker> w
   }
 
   static int _monthDelta(DateTime startDate, DateTime endDate) {
-    return (endDate.year - startDate.year) * 12 + endDate.month - startDate.month;
+    return (endDate.year - startDate.year) * 12 +
+        endDate.month -
+        startDate.month;
   }
 
   /// Add months to a month truncated date.
@@ -257,7 +263,8 @@ class _FlutterRoundedMonthPickerState extends State<FlutterRoundedMonthPicker> w
       decoration: BoxDecoration(
           color: widget.style?.backgroundPicker,
           borderRadius: orientation == Orientation.landscape
-              ? BorderRadius.only(topRight: Radius.circular(widget.borderRadius))
+              ? BorderRadius.only(
+                  topRight: Radius.circular(widget.borderRadius))
               : null),
       // The month picker just adds month navigation to the day picker, so make
       // it the same height as the DayPicker
@@ -292,7 +299,7 @@ class _FlutterRoundedMonthPickerState extends State<FlutterRoundedMonthPicker> w
           /// Arrow Left
           PositionedDirectional(
             top: widget.style?.marginLeftArrowPrevious ?? 0.0,
-            start: widget.style?.marginLeftArrowPrevious ?? 8.0,
+            start: widget.style?.marginLeftArrowPrevious ?? 25.0,
             child: Semantics(
               sortKey: _MonthPickerSortKey.previousMonth,
               child: FadeTransition(
@@ -306,7 +313,9 @@ class _FlutterRoundedMonthPickerState extends State<FlutterRoundedMonthPicker> w
                   tooltip: _isDisplayingFirstMonth
                       ? null
                       : '${localizations.previousMonthTooltip} ${localizations.formatMonthYear(_previousMonthDate)}',
-                  onPressed: _isDisplayingFirstMonth == true ? null : _handlePreviousMonth,
+                  onPressed: _isDisplayingFirstMonth == true
+                      ? null
+                      : _handlePreviousMonth,
                 ),
               ),
             ),
@@ -315,7 +324,7 @@ class _FlutterRoundedMonthPickerState extends State<FlutterRoundedMonthPicker> w
           /// Arrow Right
           PositionedDirectional(
             top: widget.style?.marginTopArrowNext ?? 0.0,
-            end: widget.style?.marginRightArrowNext ?? 8.0,
+            end: widget.style?.marginRightArrowNext ?? 35.0,
             child: Semantics(
               sortKey: _MonthPickerSortKey.nextMonth,
               child: FadeTransition(

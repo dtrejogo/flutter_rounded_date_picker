@@ -12,6 +12,7 @@ import 'package:flutter_rounded_date_picker/src/era_mode.dart';
 import 'package:flutter_rounded_date_picker/src/material_rounded_date_picker_style.dart';
 import 'package:flutter_rounded_date_picker/src/material_rounded_year_picker_style.dart';
 import 'package:flutter_rounded_date_picker/src/widgets/flutter_rounded_day_picker.dart';
+import 'package:top_modal_sheet/top_modal_sheet.dart';
 
 // Examples can assume:
 // BuildContext context;
@@ -140,10 +141,13 @@ Future<DateTime?> showRoundedDatePicker(
     'Provided initialDate must satisfy provided selectableDayPredicate',
   );
   assert(
-    (onTapActionButton != null && textActionButton != null) || onTapActionButton == null,
+    (onTapActionButton != null && textActionButton != null) ||
+        onTapActionButton == null,
     "If you provide onLeftBtn, you must provide leftBtn",
   );
   assert(debugCheckHasMaterialLocalizations(context));
+
+  final _topModalSheetKey = GlobalKey<FlutterRoundedDatePickerDialogState>();
 
   Widget child = GestureDetector(
     onTap: () {
@@ -158,6 +162,7 @@ Future<DateTime?> showRoundedDatePicker(
           //
         },
         child: FlutterRoundedDatePickerDialog(
+          key: _topModalSheetKey,
           height: height,
           initialDate: initialDate,
           firstDate: firstDate,
@@ -200,9 +205,32 @@ Future<DateTime?> showRoundedDatePicker(
     );
   }
 
-  return await showDialog<DateTime>(
+  /*return await showDialog<DateTime>(
     context: context,
     barrierDismissible: barrierDismissible,
     builder: (_) => Theme(data: theme!, child: child),
-  );
+  );*/
+
+  /*return await showGeneralDialog<DateTime>(
+    context: context,
+    barrierDismissible: barrierDismissible,
+    transitionDuration: Duration(milliseconds: 700),
+    transitionBuilder: (context, anim1, anim2, child) {
+      return SlideTransition(
+        position: Tween(begin: Offset(0, -1), end: Offset(0, 0)).animate(anim1),
+        child: child,
+      );
+    },
+    pageBuilder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation) {
+      return Theme(data: theme!, child: child);
+    },
+  );*/
+
+  DateTime? d =
+      await showTopModalSheet<DateTime>(context: context, child: child);
+
+  d = _topModalSheetKey.currentState?.getSelectedDate();
+
+  return d;
 }

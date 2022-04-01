@@ -80,10 +80,12 @@ class FlutterRoundedDatePickerDialog extends StatefulWidget {
   final OnTapDay? onTapDay;
 
   @override
-  _FlutterRoundedDatePickerDialogState createState() => _FlutterRoundedDatePickerDialogState();
+  FlutterRoundedDatePickerDialogState createState() =>
+      FlutterRoundedDatePickerDialogState();
 }
 
-class _FlutterRoundedDatePickerDialogState extends State<FlutterRoundedDatePickerDialog> {
+class FlutterRoundedDatePickerDialogState
+    extends State<FlutterRoundedDatePickerDialog> {
   @override
   void initState() {
     super.initState();
@@ -174,6 +176,10 @@ class _FlutterRoundedDatePickerDialogState extends State<FlutterRoundedDatePicke
     Navigator.of(context).pop(_selectedDate);
   }
 
+  DateTime getSelectedDate() {
+    return _selectedDate;
+  }
+
   Widget _buildPicker() {
     switch (_mode) {
       case DatePickerMode.year:
@@ -232,13 +238,18 @@ class _FlutterRoundedDatePickerDialogState extends State<FlutterRoundedDatePicke
 
     Color backgroundPicker = theme.dialogBackgroundColor;
     if (_mode == DatePickerMode.day) {
-      backgroundPicker = widget.styleDatePicker?.backgroundPicker ?? theme.dialogBackgroundColor;
+      backgroundPicker = widget.styleDatePicker?.backgroundPicker ??
+          theme.dialogBackgroundColor;
     } else {
-      backgroundPicker = widget.styleYearPicker?.backgroundPicker ?? theme.dialogBackgroundColor;
+      backgroundPicker = widget.styleYearPicker?.backgroundPicker ??
+          theme.dialogBackgroundColor;
     }
 
     final Dialog dialog = Dialog(
-      child: OrientationBuilder(builder: (BuildContext context, Orientation orientation) {
+      alignment: Alignment.topCenter,
+      insetPadding: EdgeInsets.all(0),
+      child: OrientationBuilder(
+          builder: (BuildContext context, Orientation orientation) {
         final Widget header = FlutterRoundedDatePickerHeader(
             selectedDate: _selectedDate,
             mode: _mode,
@@ -281,22 +292,36 @@ class _FlutterRoundedDatePickerDialogState extends State<FlutterRoundedDatePicke
             return Container(
               decoration: BoxDecoration(
                 color: backgroundPicker,
-                borderRadius: BorderRadius.circular(widget.borderRadius),
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(widget.borderRadius),
+                    bottomRight: Radius.circular(widget.borderRadius)),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  header,
-                  if (widget.height == null)
-                    Flexible(child: picker)
-                  else
-                    SizedBox(
-                      height: widget.height,
-                      child: picker,
-                    ),
-                  actions,
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    header,
+                    if (widget.height == null)
+                      Flexible(child: picker)
+                    else
+                      SizedBox(
+                        height: widget.height,
+                        child: picker,
+                      ),
+                    actions,
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      child: Container(
+                        width: 73,
+                        height: 7,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 161, 207, 239),
+                          borderRadius: BorderRadius.circular(90),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             );
         }

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_rounded_date_picker_example/home.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +13,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,7 +28,7 @@ class _MyAppState extends State<MyApp> {
         const Locale('en', 'US'), // English
         const Locale('th', 'TH'), // Thai
       ],
-      home: Home(),
+      home: Container(),
     );
   }
 }

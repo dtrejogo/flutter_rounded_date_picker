@@ -118,9 +118,21 @@ class FlutterRoundedDatePickerHeader extends StatelessWidget {
         ),
         child: Semantics(
           selected: mode == DatePickerMode.year,
-          child: Text(
-            "${calculateYearEra(era, selectedDate.year)}",
-            style: yearStyle,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 146, 193, 230),
+              borderRadius: BorderRadius.circular(90),
+              boxShadow: [
+                BoxShadow(color: Colors.transparent, spreadRadius: 2),
+              ],
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 40),
+              child: Text(
+                "${calculateYearEra(era, selectedDate.year)}",
+                style: yearStyle,
+              ),
+            ),
           ),
         ),
       ),
@@ -159,35 +171,18 @@ class FlutterRoundedDatePickerHeader extends StatelessWidget {
     }
 
     return Container(
-      decoration: BoxDecoration(
-        image: imageHeader != null
-            ? DecorationImage(image: imageHeader!, fit: BoxFit.cover)
-            : null,
-        color: backgroundColor,
-        borderRadius: borderRadiusData,
-      ),
       padding: padding,
       child: Column(
         mainAxisAlignment: mainAxisAlignment,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
+          SizedBox(
+            height: 33,
+          ),
           yearButton,
-          dayButton,
-          const SizedBox(height: 4.0),
-          Visibility(
-            visible: description.isNotEmpty,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: Text(
-                description,
-                style: TextStyle(
-                  color: yearColor,
-                  fontSize: 12,
-                  fontFamily: fontFamily,
-                ),
-              ),
-            ),
-          )
+          SizedBox(
+            height: 7,
+          ),
         ],
       ),
     );

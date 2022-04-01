@@ -11,3 +11,5 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  top_modal_sheet: ^1.0.0+1
