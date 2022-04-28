@@ -147,7 +147,8 @@ Future<DateTime?> showRoundedDatePicker(
   );
   assert(debugCheckHasMaterialLocalizations(context));
 
-  final _topModalSheetKey = GlobalKey<FlutterRoundedDatePickerDialogState>();
+  final _datePickerKey = GlobalKey<FlutterRoundedDatePickerDialogState>();
+  final _topModalKey = GlobalKey<TopModalSheetState>();
 
   Widget child = GestureDetector(
     onTap: () {
@@ -162,7 +163,7 @@ Future<DateTime?> showRoundedDatePicker(
           //
         },
         child: FlutterRoundedDatePickerDialog(
-          key: _topModalSheetKey,
+          key: _datePickerKey,
           height: height,
           initialDate: initialDate,
           firstDate: firstDate,
@@ -185,6 +186,12 @@ Future<DateTime?> showRoundedDatePicker(
           builderDay: builderDay,
           listDateDisabled: listDateDisabled,
           onTapDay: onTapDay,
+          onTapButtonPositive: () {
+            _topModalKey.currentState!.onBackPressed();
+          },
+          onTapButtonNegative: () {
+            _topModalKey.currentState!.onBackPressed();
+          },
         ),
       ),
     ),
@@ -227,10 +234,29 @@ Future<DateTime?> showRoundedDatePicker(
     },
   );*/
 
-  DateTime? d =
-      await showTopModalSheet<DateTime>(context: context, child: child);
+  DateTime? d = await showTopModalSheet2<DateTime>(
+      key: _topModalKey, context: context, child: child);
 
-  d = _topModalSheetKey.currentState?.getSelectedDate();
+  if (_datePickerKey.currentState != null) {
+    if (!_datePickerKey.currentState!.cancelClicked()) {
+      return _datePickerKey.currentState?.getSelectedDate();
+    }
+  }
 
-  return d;
+  return null;
+}
+
+Future<T?> showTopModalSheet2<T>({
+  Key? key,
+  required BuildContext context,
+  required Widget child,
+}) {
+  return Navigator.of(context).push(PageRouteBuilder<T>(
+      pageBuilder: (_, __, ___) {
+        return TopModalSheet<T>(
+          key: key,
+          child: child,
+        );
+      },
+      opaque: false));
 }

@@ -34,7 +34,9 @@ class FlutterRoundedDatePickerDialog extends StatefulWidget {
       this.customWeekDays,
       this.builderDay,
       this.listDateDisabled,
-      this.onTapDay})
+      this.onTapDay,
+      this.onTapButtonPositive,
+      this.onTapButtonNegative})
       : super(key: key);
 
   final DateTime initialDate;
@@ -79,6 +81,9 @@ class FlutterRoundedDatePickerDialog extends StatefulWidget {
   final List<DateTime>? listDateDisabled;
   final OnTapDay? onTapDay;
 
+  final VoidCallback? onTapButtonNegative;
+  final VoidCallback? onTapButtonPositive;
+
   @override
   FlutterRoundedDatePickerDialogState createState() =>
       FlutterRoundedDatePickerDialogState();
@@ -86,6 +91,7 @@ class FlutterRoundedDatePickerDialog extends StatefulWidget {
 
 class FlutterRoundedDatePickerDialogState
     extends State<FlutterRoundedDatePickerDialog> {
+  bool _cancelClicked = false;
   @override
   void initState() {
     super.initState();
@@ -169,12 +175,21 @@ class FlutterRoundedDatePickerDialogState
   }
 
   void _handleCancel() {
-    Navigator.of(context).pop();
+    //Navigator.of(context).pop();
+    _cancelClicked = true;
+    if (widget.onTapButtonNegative != null) {
+      widget.onTapButtonNegative!();
+    }
   }
 
   void _handleOk() {
-    Navigator.of(context).pop(_selectedDate);
+    //Navigator.of(context).pop(_selectedDate);
+    if (widget.onTapButtonPositive != null) {
+      widget.onTapButtonPositive!();
+    }
   }
+
+  bool cancelClicked() => _cancelClicked;
 
   DateTime getSelectedDate() {
     return _selectedDate;
