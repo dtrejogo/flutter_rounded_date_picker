@@ -324,16 +324,8 @@ class FlutterRoundedDatePickerDialogState
                         child: picker,
                       ),
                     actions,
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
-                      child: Container(
-                        width: 73,
-                        height: 7,
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 161, 207, 239),
-                          borderRadius: BorderRadius.circular(90),
-                        ),
-                      ),
+                    SizedBox(
+                      height: 20,
                     )
                   ],
                 ),

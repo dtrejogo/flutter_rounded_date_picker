@@ -120,7 +120,7 @@ class FlutterRoundedDatePickerHeader extends StatelessWidget {
           selected: mode == DatePickerMode.year,
           child: Container(
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 146, 193, 230),
+              color: const Color(0xFF7FB7E2).withOpacity(0.15),
               borderRadius: BorderRadius.circular(90),
               boxShadow: [
                 BoxShadow(color: Colors.transparent, spreadRadius: 2),

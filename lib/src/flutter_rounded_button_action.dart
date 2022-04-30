@@ -6,7 +6,8 @@ class FlutterRoundedButtonAction extends StatelessWidget {
   final String? textActionButton;
   final VoidCallback? onTapButtonNegative; // Default is "Cancel" button.
   final VoidCallback? onTapButtonPositive; // Default is "OK" button.
-  final VoidCallback? onTapButtonAction; // Default is "Action" button which will be on the left.
+  final VoidCallback?
+      onTapButtonAction; // Default is "Action" button which will be on the left.
   final TextStyle? textStyleButtonAction;
   final TextStyle? textStyleButtonPositive;
   final TextStyle? textStyleButtonNegative;
@@ -33,21 +34,41 @@ class FlutterRoundedButtonAction extends StatelessWidget {
       : super(key: key);
 
   List<Widget> _buildActionsButton() {
-    final Widget negativeButton = FlatButton(
-      child: Text(
-        textButtonNegative ?? localizations.cancelButtonLabel,
-        style: textStyleButtonNegative,
-      ),
-      onPressed: onTapButtonNegative,
-    );
+    final Widget negativeButton = GestureDetector(
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          width: 125,
+          decoration: BoxDecoration(
+            color: const Color(0xFF7FB7E2).withOpacity(0.05),
+            borderRadius: BorderRadius.circular(90),
+          ),
+          child: Center(
+            child: Text(
+              textButtonNegative ?? localizations.cancelButtonLabel,
+              style: textStyleButtonNegative,
+            ),
+          ),
+        ),
+        onTap: onTapButtonNegative);
 
-    final Widget positiveButton = FlatButton(
-      child: Text(
-        textButtonPositive ?? localizations.okButtonLabel,
-        style: textStyleButtonPositive,
-      ),
-      onPressed: onTapButtonPositive,
-    );
+    final Widget positiveButton = GestureDetector(
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            vertical: 10,
+          ),
+          width: 125,
+          decoration: BoxDecoration(
+            color: const Color(0xFF7FB7E2).withOpacity(0.10),
+            borderRadius: BorderRadius.circular(90),
+          ),
+          child: Center(
+            child: Text(
+              textButtonPositive ?? localizations.okButtonLabel,
+              style: textStyleButtonPositive,
+            ),
+          ),
+        ),
+        onTap: onTapButtonPositive);
 
     if (textActionButton != null) {
       final Widget leftButton = FlatButton(
@@ -60,7 +81,13 @@ class FlutterRoundedButtonAction extends StatelessWidget {
       ];
     }
 
-    return [negativeButton, positiveButton];
+    return [
+      negativeButton,
+      SizedBox(
+        width: 20,
+      ),
+      positiveButton
+    ];
   }
 
   @override
@@ -70,10 +97,13 @@ class FlutterRoundedButtonAction extends StatelessWidget {
       padding: paddingActionBar,
       decoration: BoxDecoration(
           color: background,
-          borderRadius:
-              orientation == Orientation.landscape ? BorderRadius.only(bottomRight: Radius.circular(borderRadius)) : BorderRadius.vertical(bottom: Radius.circular(borderRadius))),
+          borderRadius: orientation == Orientation.landscape
+              ? BorderRadius.only(bottomRight: Radius.circular(borderRadius))
+              : BorderRadius.vertical(bottom: Radius.circular(borderRadius))),
       child: ButtonBar(
-        alignment: textActionButton != null ? MainAxisAlignment.spaceBetween : MainAxisAlignment.end,
+        alignment: textActionButton != null
+            ? MainAxisAlignment.spaceBetween
+            : MainAxisAlignment.center,
         children: _buildActionsButton(),
       ),
     );
