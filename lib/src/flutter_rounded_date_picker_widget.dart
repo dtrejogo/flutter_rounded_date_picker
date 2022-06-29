@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -187,10 +188,18 @@ Future<DateTime?> showRoundedDatePicker(
           listDateDisabled: listDateDisabled,
           onTapDay: onTapDay,
           onTapButtonPositive: () {
-            _topModalKey.currentState!.onBackPressed();
+            if (Platform.isIOS) {
+              Navigator.pop(context);
+            } else {
+              _topModalKey.currentState!.onBackPressed();
+            }
           },
           onTapButtonNegative: () {
-            _topModalKey.currentState!.onBackPressed();
+            if (Platform.isIOS) {
+              Navigator.pop(context);
+            } else {
+              _topModalKey.currentState!.onBackPressed();
+            }
           },
         ),
       ),
@@ -212,12 +221,6 @@ Future<DateTime?> showRoundedDatePicker(
     );
   }
 
-  /*return await showDialog<DateTime>(
-    context: context,
-    barrierDismissible: barrierDismissible,
-    builder: (_) => Theme(data: theme!, child: child),
-  );*/
-
   /*return await showGeneralDialog<DateTime>(
     context: context,
     barrierDismissible: barrierDismissible,
@@ -234,8 +237,16 @@ Future<DateTime?> showRoundedDatePicker(
     },
   );*/
 
-  DateTime? d = await showTopModalSheet2<DateTime>(
-      key: _topModalKey, context: context, child: child);
+  if (Platform.isIOS) {
+    await showDialog<DateTime>(
+      context: context,
+      barrierDismissible: barrierDismissible,
+      builder: (_) => Theme(data: theme!, child: child),
+    );
+  } else {
+    await showTopModalSheet2<DateTime>(
+        key: _topModalKey, context: context, child: child);
+  }
 
   if (_datePickerKey.currentState != null) {
     if (!_datePickerKey.currentState!.cancelClicked()) {
