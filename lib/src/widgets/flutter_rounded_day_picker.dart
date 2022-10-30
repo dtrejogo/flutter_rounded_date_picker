@@ -7,6 +7,8 @@ import 'package:flutter_rounded_date_picker/src/material_rounded_date_picker_sty
 import 'package:flutter_rounded_date_picker/src/thai_date_utils.dart';
 import 'dart:math' as math;
 
+import 'package:flutter_rounded_date_picker/src/widgets/animated_month.dart';
+
 /// Displays the days of a given month and allows choosing a day.
 ///
 /// The days are arranged in a rectangular grid with one column for each day of
@@ -78,7 +80,8 @@ class FlutterRoundedDayPicker extends StatelessWidget {
       this.customWeekDays,
       this.builderDay,
       this.listDateDisabled,
-      this.onTapDay})
+      this.onTapDay,
+      this.animatedMonth = false})
       : assert(!firstDate.isAfter(lastDate)),
 //        assert(selectedDate.isAfter(firstDate) || selectedDate.isAtSameMomentAs(firstDate)),
         super(key: key);
@@ -117,6 +120,7 @@ class FlutterRoundedDayPicker extends StatelessWidget {
   final BuilderDayOfDatePicker? builderDay;
   final List<DateTime>? listDateDisabled;
   final OnTapDay? onTapDay;
+  bool animatedMonth;
 
   /// Determines the way that drag start behavior is handled.
   ///
@@ -429,22 +433,26 @@ class FlutterRoundedDayPicker extends StatelessWidget {
           EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       child: Column(
         children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-                color: style?.backgroundHeaderMonth,
-                borderRadius: orientation == Orientation.landscape
-                    ? BorderRadius.only(topRight: Radius.circular(borderRadius))
-                    : null),
-            padding: style?.paddingMonthHeader,
-//            height: _kDayPickerRowHeight,
-            child: Center(
-              child: ExcludeSemantics(
-                child: Text(
-                  monthYearHeader.replaceAll(" de ", " "),
-                  style: style?.textStyleMonthYearHeader ??
-                      themeData.textTheme.subtitle1!.copyWith(
-                        fontFamily: fontFamily,
-                      ),
+          AnimatedMonth(
+            animated: animatedMonth,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: style?.backgroundHeaderMonth,
+                  borderRadius: orientation == Orientation.landscape
+                      ? BorderRadius.only(
+                          topRight: Radius.circular(borderRadius))
+                      : null),
+              padding: style?.paddingMonthHeader,
+              //            height: _kDayPickerRowHeight,
+              child: Center(
+                child: ExcludeSemantics(
+                  child: Text(
+                    monthYearHeader.replaceAll(" de ", " "),
+                    style: style?.textStyleMonthYearHeader ??
+                        themeData.textTheme.subtitle1!.copyWith(
+                          fontFamily: fontFamily,
+                        ),
+                  ),
                 ),
               ),
             ),

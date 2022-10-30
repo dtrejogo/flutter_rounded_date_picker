@@ -36,7 +36,8 @@ class FlutterRoundedDatePickerDialog extends StatefulWidget {
       this.listDateDisabled,
       this.onTapDay,
       this.onTapButtonPositive,
-      this.onTapButtonNegative})
+      this.onTapButtonNegative,
+      this.isFirstTime = false})
       : super(key: key);
 
   final DateTime initialDate;
@@ -84,6 +85,8 @@ class FlutterRoundedDatePickerDialog extends StatefulWidget {
   final VoidCallback? onTapButtonNegative;
   final VoidCallback? onTapButtonPositive;
 
+  final bool isFirstTime;
+
   @override
   FlutterRoundedDatePickerDialogState createState() =>
       FlutterRoundedDatePickerDialogState();
@@ -92,11 +95,17 @@ class FlutterRoundedDatePickerDialog extends StatefulWidget {
 class FlutterRoundedDatePickerDialogState
     extends State<FlutterRoundedDatePickerDialog> {
   bool _cancelClicked = false;
+  double calendarOpacity = 1;
+
   @override
   void initState() {
     super.initState();
     _selectedDate = widget.initialDate;
     _mode = widget.initialDatePickerMode;
+
+    if (widget.isFirstTime) {
+      calendarOpacity = 0.3;
+    }
   }
 
   bool _announcedInitialDate = false;
@@ -121,6 +130,8 @@ class FlutterRoundedDatePickerDialogState
   late DateTime _selectedDate;
   late DatePickerMode _mode;
   final GlobalKey _pickerKey = GlobalKey();
+  final GlobalKey<FlutterRoundedMonthPickerState> _monthPicker =
+      GlobalKey<FlutterRoundedMonthPickerState>();
 
   void _vibrate() {
     switch (Theme.of(context).platform) {
@@ -138,6 +149,7 @@ class FlutterRoundedDatePickerDialogState
     _vibrate();
     setState(() {
       _mode = mode;
+      calendarOpacity = 1;
       if (_mode == DatePickerMode.day) {
         SemanticsService.announce(
           localizations.formatMonthYear(_selectedDate),
@@ -158,12 +170,16 @@ class FlutterRoundedDatePickerDialogState
     } else if (value.isAfter(widget.lastDate)) {
       value = widget.lastDate;
     }
-    if (value == _selectedDate) return;
+    //if (value == _selectedDate) return;
 
     _vibrate();
     setState(() {
       _mode = DatePickerMode.day;
       _selectedDate = value;
+    });
+
+    Future.delayed(Duration(milliseconds: 300), () {
+      _monthPicker.currentState?.startAnimation();
     });
   }
 
@@ -211,7 +227,7 @@ class FlutterRoundedDatePickerDialogState
       case DatePickerMode.day:
       default:
         return FlutterRoundedMonthPicker(
-          key: _pickerKey,
+          key: _monthPicker,
           selectedDate: _selectedDate,
           onChanged: _handleDayChanged,
           firstDate: widget.firstDate,
@@ -266,16 +282,18 @@ class FlutterRoundedDatePickerDialogState
       child: OrientationBuilder(
           builder: (BuildContext context, Orientation orientation) {
         final Widget header = FlutterRoundedDatePickerHeader(
-            selectedDate: _selectedDate,
-            mode: _mode,
-            onModeChanged: _handleModeChanged,
-            orientation: orientation,
-            era: widget.era,
-            borderRadius: widget.borderRadius,
-            imageHeader: widget.imageHeader,
-            description: widget.description,
-            fontFamily: widget.fontFamily,
-            style: widget.styleDatePicker);
+          selectedDate: _selectedDate,
+          mode: _mode,
+          onModeChanged: _handleModeChanged,
+          orientation: orientation,
+          era: widget.era,
+          borderRadius: widget.borderRadius,
+          imageHeader: widget.imageHeader,
+          description: widget.description,
+          fontFamily: widget.fontFamily,
+          style: widget.styleDatePicker,
+          isFirstTime: widget.isFirstTime,
+        );
         switch (orientation) {
           case Orientation.landscape:
             return Container(
@@ -319,9 +337,12 @@ class FlutterRoundedDatePickerDialogState
                     if (widget.height == null)
                       Flexible(child: picker)
                     else
-                      SizedBox(
-                        height: widget.height,
-                        child: picker,
+                      Opacity(
+                        opacity: calendarOpacity,
+                        child: SizedBox(
+                          height: widget.height,
+                          child: picker,
+                        ),
                       ),
                     actions,
                     SizedBox(

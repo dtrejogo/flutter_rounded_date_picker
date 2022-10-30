@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_rounded_date_picker/src/era_mode.dart';
 import 'package:flutter_rounded_date_picker/src/material_rounded_date_picker_style.dart';
+import 'package:flutter_rounded_date_picker/src/widgets/animated_month.dart';
 import 'package:flutter_rounded_date_picker/src/widgets/flutter_rounded_day_picker.dart';
 
 /// A scrollable list of months to allow picking a month.
@@ -92,11 +93,11 @@ class FlutterRoundedMonthPicker extends StatefulWidget {
   final OnTapDay? onTapDay;
 
   @override
-  _FlutterRoundedMonthPickerState createState() =>
-      _FlutterRoundedMonthPickerState();
+  FlutterRoundedMonthPickerState createState() =>
+      FlutterRoundedMonthPickerState();
 }
 
-class _FlutterRoundedMonthPickerState extends State<FlutterRoundedMonthPicker>
+class FlutterRoundedMonthPickerState extends State<FlutterRoundedMonthPicker>
     with SingleTickerProviderStateMixin {
   static final Animatable<double> _chevronOpacityTween =
       Tween<double>(begin: 1.0, end: 0.0)
@@ -119,6 +120,16 @@ class _FlutterRoundedMonthPickerState extends State<FlutterRoundedMonthPicker>
     _chevronOpacityAnimation = _chevronOpacityController.drive(
       _chevronOpacityTween,
     );
+  }
+
+  bool animateMonth = false;
+
+  startAnimation() {
+    animateMonth = true;
+    setState(() {});
+    Future.delayed(Duration(milliseconds: 500), () {
+      animateMonth = false;
+    });
   }
 
   @override
@@ -196,6 +207,7 @@ class _FlutterRoundedMonthPickerState extends State<FlutterRoundedMonthPicker>
       builderDay: widget.builderDay,
       listDateDisabled: widget.listDateDisabled,
       onTapDay: widget.onTapDay,
+      animatedMonth: animateMonth,
     );
   }
 

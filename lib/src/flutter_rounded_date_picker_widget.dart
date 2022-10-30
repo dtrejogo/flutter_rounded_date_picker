@@ -119,7 +119,8 @@ Future<DateTime?> showRoundedDatePicker(
     List<String>? customWeekDays,
     BuilderDayOfDatePicker? builderDay,
     List<DateTime>? listDateDisabled,
-    OnTapDay? onTapDay}) async {
+    OnTapDay? onTapDay,
+    bool isFirstTime = false}) async {
   initialDate ??= DateTime.now();
   firstDate ??= DateTime(initialDate.year - 1);
   lastDate ??= DateTime(initialDate.year + 1);
@@ -187,6 +188,7 @@ Future<DateTime?> showRoundedDatePicker(
           builderDay: builderDay,
           listDateDisabled: listDateDisabled,
           onTapDay: onTapDay,
+          isFirstTime: isFirstTime,
           onTapButtonPositive: () {
             if (Platform.isIOS) {
               Navigator.pop(context);

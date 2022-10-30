@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_date_picker/src/era_mode.dart';
 import 'package:flutter_rounded_date_picker/src/material_rounded_date_picker_style.dart';
+import 'package:flutter_rounded_date_picker/src/widgets/animated_year.dart';
 
 class FlutterRoundedDatePickerHeader extends StatelessWidget {
   const FlutterRoundedDatePickerHeader(
@@ -14,7 +15,8 @@ class FlutterRoundedDatePickerHeader extends StatelessWidget {
       this.imageHeader,
       this.description = "",
       this.fontFamily,
-      this.style})
+      this.style,
+      this.isFirstTime = false})
       : super(key: key);
 
   final DateTime selectedDate;
@@ -37,6 +39,8 @@ class FlutterRoundedDatePickerHeader extends StatelessWidget {
 
   /// Font
   final String? fontFamily;
+
+  final bool isFirstTime;
 
   void _handleChangeMode(DatePickerMode value) {
     if (value != mode) onModeChanged(value);
@@ -118,22 +122,12 @@ class FlutterRoundedDatePickerHeader extends StatelessWidget {
         ),
         child: Semantics(
           selected: mode == DatePickerMode.year,
-          child: Container(
-            decoration: BoxDecoration(
-              color: const Color(0xFF7FB7E2).withOpacity(0.15),
-              borderRadius: BorderRadius.circular(90),
-              boxShadow: [
-                BoxShadow(color: Colors.transparent, spreadRadius: 2),
-              ],
-            ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 40),
-              child: Text(
+          child: AnimatedYear(
+              animate: isFirstTime,
+              year: Text(
                 "${calculateYearEra(era, selectedDate.year)}",
                 style: yearStyle,
-              ),
-            ),
-          ),
+              )),
         ),
       ),
     );
