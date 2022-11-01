@@ -165,6 +165,9 @@ class FlutterRoundedDatePickerDialogState
   }
 
   void _handleYearChanged(DateTime value) {
+    //colocar julio por default cuando cambia de año.
+    value = DateTime(value.year, DateTime.july, value.day);
+
     if (value.isBefore(widget.firstDate)) {
       value = widget.firstDate;
     } else if (value.isAfter(widget.lastDate)) {

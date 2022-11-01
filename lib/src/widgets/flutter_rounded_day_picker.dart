@@ -168,7 +168,7 @@ class FlutterRoundedDayPicker extends StatelessWidget {
         result.add(ExcludeSemantics(
           child: Center(
               child: Padding(
-            padding: EdgeInsets.only(bottom: 25),
+            padding: EdgeInsets.only(bottom: 0),
             child: Text(
               i < customWeekDays!.length ? customWeekDays![i] : "",
               style: headerStyle,
@@ -458,7 +458,7 @@ class FlutterRoundedDayPicker extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 37,
+            height: 23,
           ),
           Flexible(
             child: SizedBox(
